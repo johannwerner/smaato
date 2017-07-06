@@ -10,4 +10,10 @@
 
 @implementation ImageTableViewCell
 
+-(void)awakeFromNib {
+    
+    [super awakeFromNib];
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+}
+
 @end

@@ -17,7 +17,7 @@
     
     [API fetchListWithDataCompletion:^(NSMutableArray *responseArray, NSError *error) {
         for (NSInteger i = 0; i < responseArray.count;i++) {
-            ListDataModel *listDataModel = responseArray[i];
+            ListDataModel *listDataModel = responseArray[(NSUInteger) i];
             if(listDataModel.dataTypeEnum == DataTypeNone) {
                 [responseArray removeObject:listDataModel];
             }

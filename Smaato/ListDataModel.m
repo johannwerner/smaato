@@ -25,7 +25,7 @@
             type = [type lowercaseString];
             if ([type isEqualToString:@"text"]) {
                 self.dataTypeEnum = DataTypeText;
-
+                
             } else  if ([type isEqualToString:@"img"]) {
                 self.dataTypeEnum = DataTypeImage;
             }
@@ -37,10 +37,7 @@
         
         if (attributes[@"user"] && [attributes[@"user"] isKindOfClass:[NSDictionary class]]) {
             self.userModel = [[UserModel alloc] initWithDictionary:attributes[@"user"]];
-        }
-
-        
-
+        } 
         
     }
     return self;
@@ -48,10 +45,10 @@
 
 - (void)setCreatedSecondsAgo:(NSInteger)createdSecondsAgo {
     _createdSecondsAgo = createdSecondsAgo;
-
-        NSDate *date = [NSDate dateWithTimeIntervalSinceNow:-ABS(createdSecondsAgo)];
     
-        self.createdString = [TimeHelper relativeDateStringForDate:date];
+    NSDate *date = [NSDate dateWithTimeIntervalSinceNow:-ABS(createdSecondsAgo)];
+    
+    self.createdString = [TimeHelper relativeDateStringForDate:date];
 }
 
 @end

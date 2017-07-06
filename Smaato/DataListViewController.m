@@ -6,7 +6,7 @@
 //  Copyright © 2017 Johann Werner. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "DataListViewController.h"
 #import "ViewModel.h"
 #import "ImageTableViewCell.h"
 #import "TextTableViewCell.h"
@@ -15,7 +15,7 @@
 #import "ImageCacheHelper.h"
 #import "FavouritesViewController.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface DataListViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) ViewModel *viewModel;
 
@@ -25,16 +25,16 @@
 
 @end
 
-@implementation ViewController
+@implementation DataListViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     self.viewModel = [[ViewModel alloc] init];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"TextTableViewCell" bundle:nil] forCellReuseIdentifier: TextTableViewCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:NIBTextTableViewCell bundle:nil] forCellReuseIdentifier: TextTableViewCellIdentifier];
     
-    [self.tableView registerNib:[UINib nibWithNibName:@"ImageTableViewCell" bundle:nil] forCellReuseIdentifier:ImageTableViewCellIdentifier];
+    [self.tableView registerNib:[UINib nibWithNibName:NIBImageTableViewCell bundle:nil] forCellReuseIdentifier:ImageTableViewCellIdentifier];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -42,7 +42,7 @@
     self.imageCacheHelper = [[ImageCacheHelper alloc] init];
     
     UIBarButtonItem *favouritesButton = [[UIBarButtonItem alloc]
-                                      initWithTitle:@"Favourites"
+                                      initWithTitle:NSLocalizedString(@"FavouritesKey", nil)
                                       style:UIBarButtonItemStylePlain
                                       target:self
                                       action:@selector(showFavourites)];
@@ -63,25 +63,28 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    ListDataModel *listDataModel = self.dataArray[indexPath.row];
+    ListDataModel *listDataModel = self.dataArray[(NSUInteger) indexPath.row];
     if (listDataModel.dataTypeEnum == DataTypeImage) {
           ImageTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:ImageTableViewCellIdentifier];
         cell.nameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"NameKey", nil), listDataModel.userModel.name];
         cell.countryLabel.text = [NSString stringWithFormat:NSLocalizedString(@"CountryKey", nil), listDataModel.userModel.country];
         cell.createdLabel.text = listDataModel.createdString;
+        cell.favouriteButton.selected = listDataModel.favourite;
         cell.favouriteButton.tag = indexPath.row;
         [cell.favouriteButton addTarget:self  action:@selector(favourite:) forControlEvents:UIControlEventTouchUpInside];
         if (listDataModel.image == nil) {
-            ViewController*__weak weakSelf = self;
+ 
             [self.imageCacheHelper fetchImageFromUrl:listDataModel.dataModel.dataUrl
                                            onDidLoad:^(UIImage *image) {
                                                if (image != nil) {
                                                    listDataModel.image = image;
-                                                   [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                                                   cell.dataImageView.image = image;
                                                }
                                            }];
         } else {
-            cell.dataImageView.image = listDataModel.image;
+            if ([listDataModel.image isKindOfClass:[UIImage class]]) {
+                cell.dataImageView.image = listDataModel.image;
+            }
         }
 
         return cell;
@@ -92,6 +95,7 @@
         cell.descriptionLabel.text = listDataModel.dataModel.dataText;
         cell.createdLabel.text = listDataModel.createdString;
         cell.favouriteButton.tag = indexPath.row;
+        cell.favouriteButton.selected = listDataModel.favourite;
         [cell.favouriteButton addTarget:self  action:@selector(favourite:) forControlEvents:UIControlEventTouchUpInside];
         return cell;
     }
@@ -100,7 +104,7 @@
 #pragma mark - TableView Delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 155;
+    return ImageTextCellHeight;
 }
 
 #pragma mark - Actions
@@ -115,7 +119,7 @@
 }
 
 - (void)favourite:(UIButton*)button {
-    ListDataModel *listDataModel = self.dataArray[button.tag];
+    ListDataModel *listDataModel = self.dataArray[(NSUInteger) button.tag];
     listDataModel.favourite = !listDataModel.favourite;
     button.selected = listDataModel.favourite;
 }

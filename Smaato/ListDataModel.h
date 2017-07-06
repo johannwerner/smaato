@@ -22,12 +22,11 @@ typedef NS_ENUM (NSInteger, DataType)
 
 @property (nonatomic, assign) NSInteger createdSecondsAgo;
 @property (nonatomic, strong) NSString *createdString;
-@property (nonatomic, strong) NSString *type;
 @property (nonatomic, strong) DataModel *dataModel;
 @property (nonatomic, strong) UserModel *userModel;
 @property (nonatomic, assign) DataType dataTypeEnum;
 @property (nonatomic, assign) bool favourite;
-@property (nonatomic, assign) UIImage *image;
+@property (atomic, assign) UIImage *image;
 
 - (id)initWithDictionary:(NSDictionary *)attributes;
 

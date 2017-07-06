@@ -23,7 +23,7 @@
     [request setHTTPMethod:@"GET"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-
+    
     
     NSURLSession *session =
     [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration
@@ -41,7 +41,7 @@
                             NSMutableArray *mutableArray = [@[] mutableCopy];
                             for (NSDictionary *dictionary in responseArray) {
                                 ListDataModel *dataModel = [[ListDataModel alloc]
-                                                        initWithDictionary:dictionary];
+                                                            initWithDictionary:dictionary];
                                 [mutableArray addObject:dataModel];
                             }
                             

@@ -5,9 +5,8 @@
   Created by Johann Werner on 06.07.17.
   Copyright © 2017 Johann Werner. All rights reserved.
 */
-"NameKey" = "Name:%@";
+"NameKey" = "Name: %@";
 "CountryKey" = "Country: %@";
-"YearsAgoKey" = "%ld years ago";
 "MonthsAgoKey" = "%ld months ago";
 "WeeksAgoKey" = "%ld weeks ago";
 "DaysAgoKey" = "%ld days ago";
@@ -15,3 +14,4 @@
 "JustNowKey" = "Just now";
 "HoursAgoKey" = "%ld hours ago";
 "MinutesAgoKey" = "%ld minutes ago";
+"FavouritesKey" = "Favourites";
