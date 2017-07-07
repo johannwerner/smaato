@@ -37,7 +37,7 @@
         
         if (attributes[@"user"] && [attributes[@"user"] isKindOfClass:[NSDictionary class]]) {
             self.userModel = [[UserModel alloc] initWithDictionary:attributes[@"user"]];
-        } 
+        }
         
     }
     return self;

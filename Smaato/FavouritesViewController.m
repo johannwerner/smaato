@@ -43,13 +43,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ListDataModel *listDataModel = self.dataArray[(NSUInteger) indexPath.row];
+    
     if (listDataModel.dataTypeEnum == DataTypeImage) {
-        ImageTableViewCell *cell = [self.favouritesTableView dequeueReusableCellWithIdentifier:ImageTableViewCellIdentifier];
+        
+        ImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ImageTableViewCellIdentifier];
         cell.nameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"NameKey", nil), listDataModel.userModel.name];
         cell.countryLabel.text = [NSString stringWithFormat:NSLocalizedString(@"CountryKey", nil), listDataModel.userModel.country];
         cell.createdLabel.text = listDataModel.createdString;
         cell.favouriteButton.hidden = true;
         cell.favouriteButton.selected = listDataModel.favourite;
+        
         if (listDataModel.image == nil) {
             
             [self.imageCacheHelper fetchImageFromUrl:listDataModel.dataModel.dataUrl
@@ -57,6 +60,8 @@
                                                if (image != nil) {
                                                    listDataModel.image = image;
                                                    cell.dataImageView.image = image;
+                                               } else {
+                                                   cell.dataImageView.image = nil;
                                                }
                                            }];
         } else {
@@ -67,13 +72,15 @@
         
         return cell;
     } else {
-        TextTableViewCell *cell = [self.favouritesTableView dequeueReusableCellWithIdentifier: TextTableViewCellIdentifier];
+        
+        TextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: TextTableViewCellIdentifier];
         cell.nameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"NameKey", nil), listDataModel.userModel.name];
         cell.countryLabel.text = [NSString stringWithFormat:NSLocalizedString(@"CountryKey", nil), listDataModel.userModel.country];
         cell.descriptionLabel.text = listDataModel.dataModel.dataText;
         cell.createdLabel.text = listDataModel.createdString;
         cell.favouriteButton.hidden = YES;
         cell.favouriteButton.selected = listDataModel.favourite;
+        
         return cell;
     }
 }

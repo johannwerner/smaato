@@ -14,14 +14,15 @@
 #import "Constants.h"
 #import "ImageCacheHelper.h"
 #import "FavouritesViewController.h"
+#import "UIStoryboard+Manager.h"
 
 @interface DataListViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) ViewModel *viewModel;
-
-@property (strong, nonatomic) NSArray *dataArray;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (strong, nonatomic) ViewModel *viewModel;
 @property(strong, nonatomic) ImageCacheHelper *imageCacheHelper;
+@property (strong, nonatomic) NSArray *dataArray;
 
 @end
 
@@ -64,21 +65,26 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     ListDataModel *listDataModel = self.dataArray[(NSUInteger) indexPath.row];
+    
     if (listDataModel.dataTypeEnum == DataTypeImage) {
-          ImageTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:ImageTableViewCellIdentifier];
+        
+          ImageTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ImageTableViewCellIdentifier];
         cell.nameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"NameKey", nil), listDataModel.userModel.name];
         cell.countryLabel.text = [NSString stringWithFormat:NSLocalizedString(@"CountryKey", nil), listDataModel.userModel.country];
         cell.createdLabel.text = listDataModel.createdString;
         cell.favouriteButton.selected = listDataModel.favourite;
         cell.favouriteButton.tag = indexPath.row;
         [cell.favouriteButton addTarget:self  action:@selector(favourite:) forControlEvents:UIControlEventTouchUpInside];
+
         if (listDataModel.image == nil) {
- 
+
             [self.imageCacheHelper fetchImageFromUrl:listDataModel.dataModel.dataUrl
                                            onDidLoad:^(UIImage *image) {
                                                if (image != nil) {
                                                    listDataModel.image = image;
                                                    cell.dataImageView.image = image;
+                                               } else {
+                                                   cell.dataImageView.image = nil;
                                                }
                                            }];
         } else {
@@ -89,7 +95,8 @@
 
         return cell;
     } else {
-        TextTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier: TextTableViewCellIdentifier];
+        
+        TextTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier: TextTableViewCellIdentifier];
         cell.nameLabel.text = [NSString stringWithFormat:NSLocalizedString(@"NameKey", nil), listDataModel.userModel.name];
         cell.countryLabel.text = [NSString stringWithFormat:NSLocalizedString(@"CountryKey", nil), listDataModel.userModel.country];
         cell.descriptionLabel.text = listDataModel.dataModel.dataText;
@@ -113,7 +120,7 @@
     NSPredicate *bPredicate = [NSPredicate predicateWithFormat:@"SELF.favourite = true"];
     NSArray *filteredArray = [self.dataArray filteredArrayUsingPredicate:bPredicate];
     
-    FavouritesViewController *favouritesViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:StoryBoardIdFavouritesViewController];
+    FavouritesViewController *favouritesViewController = [[UIStoryboard mainStoryboard] instantiateViewControllerWithIdentifier:StoryBoardIdFavouritesViewController];
     favouritesViewController.dataArray = filteredArray;
     [self.navigationController pushViewController:favouritesViewController animated:YES];
 }

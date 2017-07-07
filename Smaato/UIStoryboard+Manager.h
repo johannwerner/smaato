@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  UIStoryboard+Manager.h
 //  Smaato
 //
 //  Created by Johann Werner on 06.07.17.
@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DataListViewController : UIViewController
+@interface UIStoryboard (Manager)
+
++ (UIStoryboard *)mainStoryboard;
 
 @end
-

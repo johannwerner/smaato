@@ -16,5 +16,4 @@
 @property (weak, nonatomic) IBOutlet UILabel *createdLabel;
 @property (weak, nonatomic) IBOutlet UIButton *favouriteButton;
 
-
 @end

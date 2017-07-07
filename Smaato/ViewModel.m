@@ -24,9 +24,7 @@
         }
         completion(responseArray, error);
     }];
-    
-   
-    
+ 
 }
 
 @end
